@@ -12,7 +12,8 @@ TARGET_DIR     := $(TOPDIR)/target
 ARCH           := i386
 
 # 默认：完整编译
-all: build
+#all: build
+all: install
 
 # 1. 创建目录 + 复制干净源码（关键！只拷贝，不写原目录）
 prepare:
@@ -55,10 +56,7 @@ install: build
 	@cp $(KERNEL_BUILD)/arch/$(ARCH)/boot/bzImage $(TARGET_DIR)/boot/bzImage
 	@cp $(KERNEL_BUILD)/System.map $(TARGET_DIR)/boot/System.map-2.4.22
 
-# 9. 清理：只删除 build，不动原始源码
+# 9. 彻底清理
 clean:
 	rm -rf $(BUILD_DIR)
-
-# 10. 彻底清理
-distclean: clean
 	rm -rf $(TARGET_DIR)
