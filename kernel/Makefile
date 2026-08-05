@@ -56,8 +56,8 @@ build: modules
 install: build
 	@cd $(KERNEL_BUILD) && make modules_install INSTALL_MOD_PATH=$(TARGET_DIR)
 	@cp $(KERNEL_BUILD)/vmlinux $(TARGET_DIR)/boot/vmlinuz-2.4.22
-	@cp $(KERNEL_BUILD)/arch/$(ARCH)/boot/bzImage $(TARGET_DIR)/boot/bzImage
 	@cp $(KERNEL_BUILD)/System.map $(TARGET_DIR)/boot/System.map-2.4.22
+	@cp $(KERNEL_BUILD)/arch/$(ARCH)/boot/bzImage $(TARGET_DIR)/boot/bzImage
 
 # 9. 彻底清理
 clean:

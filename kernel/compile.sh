@@ -102,7 +102,7 @@ install_modules() {
 install_kernel() {
     log_info "拷贝内核镜像与符号表至 ${TARGET_DIR}/boot"
     # Linux 2.4.22 镜像路径：arch/i386/bzImage
-    cp "${KERNEL_BUILD}/vmlinux" "${TARGET_DIR}/boot/vmlinux-2.4.22"
+    cp "${KERNEL_BUILD}/vmlinux" "${TARGET_DIR}/boot/vmlinuz-2.4.22"
     cp "${KERNEL_BUILD}/System.map" "${TARGET_DIR}/boot/System.map-2.4.22"
     cp "${KERNEL_BUILD}/arch/${ARCH}/boot/bzImage" "${TARGET_DIR}/boot/bzImage"
 }
