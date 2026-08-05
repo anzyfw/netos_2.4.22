@@ -9,7 +9,9 @@ KERNEL_ORIG    := $(TOPDIR)/linux-2.4.22
 BUILD_DIR      := $(TOPDIR)/build
 KERNEL_BUILD   := $(BUILD_DIR)/linux-2.4.22
 TARGET_DIR     := $(TOPDIR)/target
+CONFIG_DIR     := $(TOPDIR)/config
 ARCH           := i386
+CONFIG         := config.i386
 
 # 默认：完整编译
 #all: build
@@ -31,8 +33,9 @@ mrproper: prepare
 
 # 3. 使用默认配置
 defconfig: mrproper
-	@cp $(KERNEL_BUILD)/arch/$(ARCH)/defconfig $(KERNEL_BUILD)/.config
-	@cd $(KERNEL_BUILD) && yes "" | make oldconfig
+	#@cp $(KERNEL_BUILD)/arch/$(ARCH)/defconfig $(KERNEL_BUILD)/.config
+	#@cd $(KERNEL_BUILD) && yes "" | make oldconfig
+	@cp $(CONFIG_DIR)/$(CONFIG) $(KERNEL_BUILD)/.config
 
 # 4. 生成依赖
 dep: defconfig
@@ -52,7 +55,7 @@ build: modules
 # 8. 安装到 target
 install: build
 	@cd $(KERNEL_BUILD) && make modules_install INSTALL_MOD_PATH=$(TARGET_DIR)
-	#@cp $(KERNEL_BUILD)/arch/$(ARCH)/boot/bzImage $(TARGET_DIR)/boot/vmlinuz-2.4.22
+	@cp $(KERNEL_BUILD)/vmlinux $(TARGET_DIR)/boot/vmlinuz-2.4.22
 	@cp $(KERNEL_BUILD)/arch/$(ARCH)/boot/bzImage $(TARGET_DIR)/boot/bzImage
 	@cp $(KERNEL_BUILD)/System.map $(TARGET_DIR)/boot/System.map-2.4.22
 

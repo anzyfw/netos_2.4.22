@@ -11,8 +11,11 @@ BUILD_DIR="${TOP_DIR}/build"
 KERNEL_BUILD="${BUILD_DIR}/linux-2.4.22"
 # 最终安装目录
 TARGET_DIR="${TOP_DIR}/target"
+CONFIG_DIR="${TOP_DIR}/config"
 # 架构
 ARCH="i386"
+CONFIG="config.i386"
+#CONFIG="config.debug"
 
 # ====================== 函数定义 ======================
 # 打印日志
@@ -53,9 +56,9 @@ clean_build() {
 # 3. 加载内核默认配置 + 补全配置
 gen_config() {
     log_info "加载内核默认 i386 配置..."
+    # 使用现成的配置文件config.xyz
+    cp ${CONFIG_DIR}/${CONFIG} ${KERNEL_BUILD}/.config
     cd "${KERNEL_BUILD}"
-    # 使用内核自带 defconfig
-    cp arch/${ARCH}/defconfig .config
     # 自动确认所有新增配置项（无交互）
     yes "" | make oldconfig
     cd "${TOP_DIR}"
@@ -99,18 +102,12 @@ install_modules() {
 install_kernel() {
     log_info "拷贝内核镜像与符号表至 ${TARGET_DIR}/boot"
     # Linux 2.4.22 镜像路径：arch/i386/bzImage
-    #cp "${KERNEL_BUILD}/arch/${ARCH}/bzImage" "${TARGET_DIR}/boot/vmlinuz-2.4.22"
-    cp "${KERNEL_BUILD}/arch/${ARCH}/boot/bzImage" "${TARGET_DIR}/boot/vmlinuz-2.4.22"
+    cp "${KERNEL_BUILD}/vmlinux" "${TARGET_DIR}/boot/vmlinux-2.4.22"
     cp "${KERNEL_BUILD}/System.map" "${TARGET_DIR}/boot/System.map-2.4.22"
+    cp "${KERNEL_BUILD}/arch/${ARCH}/boot/bzImage" "${TARGET_DIR}/boot/bzImage"
 }
 
-# 9. 仅清理编译产物（保留安装文件）
-only_clean() {
-    log_info "清理编译目录 build/"
-    rm -rf "${BUILD_DIR}"
-}
-
-# 10. 完全清理（build + target）
+# 9. 完全清理（build + target）
 full_clean() {
     log_info "执行全量清理 build/ + target/"
     rm -rf "${BUILD_DIR}"
@@ -146,9 +143,6 @@ case "$1" in
         log_info "========================================"
         ;;
     clean)
-        only_clean
-        ;;
-    distclean)
         full_clean
         ;;
     *)
