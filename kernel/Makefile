@@ -34,8 +34,8 @@ mrproper: prepare
 # 3. 使用默认配置
 defconfig: mrproper
 	#@cp $(KERNEL_BUILD)/arch/$(ARCH)/defconfig $(KERNEL_BUILD)/.config
-	#@cd $(KERNEL_BUILD) && yes "" | make oldconfig
 	@cp $(CONFIG_DIR)/$(CONFIG) $(KERNEL_BUILD)/.config
+	@cd $(KERNEL_BUILD) && yes "" | make oldconfig
 
 # 4. 生成依赖
 dep: defconfig
